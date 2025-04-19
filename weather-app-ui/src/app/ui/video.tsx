@@ -5,9 +5,13 @@ interface VideoProps {
 
 export function Video({src}: VideoProps) {
     return (
-        <div className="ratio ratio-4x3">
-            <iframe src={src} allowFullScreen>
-            </iframe>
+        <div style={{ width: '640px', height: '480px'}} className="shadow-sm ">
+            <iframe
+                src={src}
+                allowFullScreen
+                style={{ width: '640px', height: '480px' }}
+            />
         </div>
+
     );
 }
