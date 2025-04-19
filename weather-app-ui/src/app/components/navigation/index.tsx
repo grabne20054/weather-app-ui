@@ -3,10 +3,16 @@ import { useState } from "react";
 import {Navbar} from "./navbar";
 import {Sidebar} from "./sidebar";
 
-export const Navigation = () => {
+interface NavigationProps {
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+}
+
+export const Navigation = ({theme, toggleTheme}: NavigationProps) => 
+{
   return (
     <>
-      <Navbar/>
+      <Navbar theme={theme} toggleTheme={toggleTheme}/>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Moon, Sun } from "lucide-react";
 
 const navigation = [
     { name: "Home", href: "/", current: true },
@@ -7,14 +8,19 @@ const navigation = [
     { name: "Cams", href: "/cams", current: false},
     ];
 
+interface NavBarProps {
+    theme: 'light' | 'dark';
+    toggleTheme: () => void;
+}
 
-export const Navbar = () => {
+
+export const Navbar = ({theme, toggleTheme}: NavBarProps) => {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-md">
+        <div className="container-fluid">
             <a className="navbar-brand" href="/">Wetter Dashboard Grabner</a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
@@ -30,6 +36,10 @@ export const Navbar = () => {
                         );
                     })}
                 </ul>
+                <div className="form-check form-switch ms-auto">
+                    <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onChange={toggleTheme} checked={theme === 'dark'} />
+                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">{theme === 'dark' ? <Moon/> : <Sun/>}</label>
+                </div>
             </div>
         </div>
         </nav>
