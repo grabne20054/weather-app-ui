@@ -1,5 +1,5 @@
 'use client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Minus } from 'lucide-react';
 interface CarouselProps {
     cards: React.ReactElement[];
 }
@@ -7,33 +7,27 @@ interface CarouselProps {
 export function Carousel({ cards }: CarouselProps) {
 
   return (
-    <div className="carousel slide" id="carouselWeatherCards">
+    <div className="carousel slide" id="carouselWeatherCards" data-bs-ride="carousel">
+      <div className="carousel-indicators">
+        {cards.map((_, index) => (
+          <button
+        type="button"
+        data-bs-target="#carouselWeatherCards"
+        data-bs-slide-to={index}
+        className={`${index === 0 ? "active" : ""} bg-black`}
+        aria-current={index === 0 ? "true" : undefined}
+        aria-label={`Slide ${index + 1}`}
+        key={index}>
+          </button>
+        ))}
+      </div>
         <div className="carousel-inner">
             {cards.map((card, index) => (
-            <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={index}>
+            <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={index} data-bs-interval="5000">
                 {card}
             </div>
             ))}
         </div>
-        <button
-        className="carousel-control-prev d-flex align-items-center justify-content-center"
-        type="button"
-        data-bs-target="#carouselWeatherCards"
-        data-bs-slide="prev"
-      >
-        <ChevronLeft size={32} color="black" />
-        <span className="visually-hidden">Previous</span>
-      </button>
-
-      <button
-        className="carousel-control-next d-flex align-items-center justify-content-center"
-        type="button"
-        data-bs-target="#carouselWeatherCards"
-        data-bs-slide="next"
-      >
-        <ChevronRight size={32} color="black" />
-        <span className="visually-hidden">Next</span>
-      </button>
     </div>
   );
 }
