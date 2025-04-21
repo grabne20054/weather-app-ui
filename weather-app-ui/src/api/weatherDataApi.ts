@@ -88,6 +88,18 @@ const fetchWeatherDataByLocationIdLastEntry = async (locationId: number): Promis
     }
 }
 
+const fetchMonthlyAverageWeatherData = async (): Promise<WeatherData[]> => {
+    try {
+        const response: AxiosResponse<WeatherData[]> = await axios.get(
+            `${API_BASE_URL}/wheaterdata/average/month`
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching weather data:", error);
+        throw error;
+    }
+}
+
 export {
     fetchWeatherData,
     fetchAverageWeatherDataCurrentDay,
@@ -95,6 +107,7 @@ export {
     fetchWeatherDataLastDay,
     fetchWeatherDataLastEntry,
     fetchWeatherDataByLocationId,
-    fetchWeatherDataByLocationIdLastEntry
+    fetchWeatherDataByLocationIdLastEntry,
+    fetchMonthlyAverageWeatherData
 };
 

@@ -2,7 +2,7 @@ import { Thermometer, Droplets, Droplet, Percent, Wind, Clock, MapPinned, Tag, S
 
 interface WeatherCardProps {
     location: string;
-    recordedAt: string;
+    timestamp: string;
     temperature?: number;
     humidity?: number;
     windSpeed?: number;
@@ -31,24 +31,24 @@ const handleWeatherCondition = ({ temperature, humidity, windSpeed, rainAmount }
     }
     // default
     else {
-        icon = null;
+        icon = <Tag/>;
     }
 
     return { icon };
 
 }
 
-export function WeatherCard({ location, temperature, humidity, windSpeed, rainAmount, recordedAt }: WeatherCardProps) {
-    const { icon } = handleWeatherCondition({ location, temperature, humidity, windSpeed, rainAmount, recordedAt });
+export function WeatherCard({ location, temperature, humidity, windSpeed, rainAmount, timestamp }: WeatherCardProps) {
+    const { icon } = handleWeatherCondition({ location, temperature, humidity, windSpeed, rainAmount, timestamp });
 
     return (
-        <div className="card weather-card">
+        <div className="card weather-card m-2">
             <div className="card-header d-flex justify-content-end">
             {icon !== null && <span className="weather-condition">{icon}</span>}
             </div>         
             <div className="card-body">
             <h5 className="card-title"><MapPinned/> {location}</h5>
-            <h6 className="card-subtitle"><Clock/> {recordedAt}</h6>
+            <h6 className="card-subtitle"><Clock/> {timestamp}</h6>
             <div className="card-body">
             {temperature !== undefined && (
                 <h6 className="card-text"> <Thermometer/> {temperature}°C</h6>

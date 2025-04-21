@@ -3,47 +3,79 @@ import BootstrapClient from "./components/BootstrapClient";
 import { Video } from "./ui/video";
 import { WeatherCard } from "./components/WeatherCard";
 import { Carousel } from "./ui/carousel";
+import { fetchWeatherData, fetchWeatherDataByLocationIdLastEntry, fetchAverageWeatherDataCurrentDay } from "@/api/weatherDataApi";
+import { fetchLocations, fetchLocationById } from "@/api/locationApi";
+import { WeatherLocation } from "@/interfaces/location";
+import AverageWeatherCard from "./components/AverageWeatherCard";
 
-export default function Home() {
+const getLocations = async () => {
+  const locations = await fetchLocations();
+  return locations;
+}
+
+const getLocationById = async (id: number) => {
+  const location = await fetchLocationById(id);
+  return location.name;
+}
+
+const getLastEntryWeatherData = async (location_id: number) => {
+  const weatherData = await fetchWeatherDataByLocationIdLastEntry(location_id);
+  return weatherData;
+}
+
+const getAverageWeatherData = async () => {
+  const averageWeatherData = await fetchAverageWeatherDataCurrentDay();
+  return averageWeatherData;
+}
+
+export default async function Home() {
   const liveStreamUrl = process.env.NEXT_PUBLIC_LIVE_STREAM_URL;
   const liveStreamToken = process.env.NEXT_PUBLIC_LIVE_STREAM_TOKEN;
 
-  const cards = [
-    <WeatherCard
-      location="Los Angeles"
-      recordedAt="2023-10-01 12:00"
-      temperature={30}
-      humidity={50}
-      windSpeed={10}
-      rainAmount={0}
-    />,
-    <WeatherCard
-      location="Chicago"
-      recordedAt="2023-10-01 12:00"
-      temperature={20}
-      humidity={70}
-      windSpeed={5}
-      rainAmount={0}
-    />,
-    <WeatherCard
-      location="Houston"
-      recordedAt="2023-10-01 12:00"
-      temperature={28}
-      humidity={65}
-      windSpeed={8}
-      rainAmount={0}
-    />]
+  const locations = await getLocations();
+
+  const averageWeatherData = await getAverageWeatherData();
+
+  const weatherDataArray = await Promise.all(
+  locations.map(async (location: WeatherLocation) => {
+    const weatherData = await getLastEntryWeatherData(location.id);
+    return weatherData
+  })
+  );
+  const cards = await Promise.all(weatherDataArray.flat().map(async (data, index) => {
+    if (data === null) {
+      return null;
+    }
+
+    return (
+      <WeatherCard
+        key={index}
+        location={await getLocationById(data.location_id)}
+        timestamp={data.timestamp}
+        temperature={data.temperature}
+        humidity={data.humidity}
+        windSpeed={data.wind_speed}
+        rainAmount={data.rain_amount}
+      />
+    );
+  }));
 
   return (
     <>
       <BootstrapClient />
-      <div className="d-none d-md-block container">
-        {liveStreamUrl && liveStreamToken && <Video src={liveStreamUrl + liveStreamToken} />}
-      </div>
+      
+      <div className="container-fluid d-flex flex-column">
+        <Carousel cards={cards.filter((card) => card !== null)}/>
+        <AverageWeatherCard
+          timestamp={averageWeatherData[0].timestamp}
+          temperature={averageWeatherData[0].temperature}
+          humidity={averageWeatherData[0].humidity}
+          windSpeed={averageWeatherData[0].wind_speed}
+          rainAmount={averageWeatherData[0].rain_amount}
+        />
         
-        <div className="container">
-        <Carousel cards={cards}/>
         </div>
+        
     </>
   );
 }
