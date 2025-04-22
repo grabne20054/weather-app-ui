@@ -3,8 +3,8 @@ import { usePathname } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 
 const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Statistics", href: "/statistics", current: false },
+  { name: "Wetter", href: "/", current: true },
+  { name: "Statistiken", href: "/statistics", current: false },
   { name: "Cams", href: "/cams", current: false },
 ];
 
@@ -18,7 +18,7 @@ export const Navbar = ({ theme, toggleTheme }: NavBarProps) => {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <a className="navbar-brand">Wetter Dashboard Grabner</a>
+          <a className="navbar-brand">Dashboard Grabner</a>
           <button
             className="navbar-toggler border-0"
             type="button"

@@ -64,9 +64,9 @@ const fetchWeatherDataLastYear = async (): Promise<WeatherDataWithLocation[]> =>
     }
 }
 
-const fetchWeatherDataLastEntry = async (): Promise<WeatherDataWithLocation[]> => {
+const fetchWeatherDataLastEntry = async (): Promise<WeatherDataWithLocation> => {
     try {
-        const response: AxiosResponse<WeatherDataWithLocation[]> = await axios.get(
+        const response: AxiosResponse<WeatherDataWithLocation> = await axios.get(
             `${API_BASE_URL}/wheaterdata/last-entry`
         );
         return response.data;

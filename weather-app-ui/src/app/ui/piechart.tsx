@@ -39,7 +39,7 @@ const CustomPieChart = () => {
   return (
     <div className="card shadow-sm mb-5 mt-5 bg-body rounded">
       <div className="card-header text-baseline ">
-        <h5 className="card-title">Weather Data Entries per Location</h5>
+        <h5 className="card-title">Wettereinträge pro Messstation</h5>
       </div>
       <div className="d-flex justify-content-center margin-auto">
         <ResponsiveContainer width="100%" height={300}>

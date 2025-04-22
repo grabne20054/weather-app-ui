@@ -49,7 +49,7 @@ const AverageTempChart = () => {
   return (
     <div className="card shadow-sm mb-5 mt-5 bg-body rounded">
       <div className="card-header text-baseline ">
-        <h5 className="card-title">Average Temperature Comparison</h5>
+        <h5 className="card-title">Durchschnittlicher Temperaturunterschied</h5>
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData}>

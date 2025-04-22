@@ -3,10 +3,13 @@ import BootstrapClient from "./components/BootstrapClient";
 import { Video } from "./ui/video";
 import { WeatherCard } from "./components/WeatherCard";
 import { Carousel } from "./ui/carousel";
+import TemperatureCard from "./components/TemperatureCard";
+import HumidityCard from "./components/HumidityCard";
 import {
   fetchWeatherData,
   fetchWeatherDataByLocationIdLastEntry,
   fetchAverageWeatherDataCurrentDay,
+  fetchWeatherDataLastEntry,
 } from "@/api/weatherDataApi";
 import { fetchLocations, fetchLocationById } from "@/api/locationApi";
 import { WeatherLocation } from "@/interfaces/location";
@@ -22,8 +25,13 @@ const getLocationById = async (id: number) => {
   return location.name;
 };
 
-const getLastEntryWeatherData = async (location_id: number) => {
+const getLastEntryWeatherDataByLocation = async (location_id: number) => {
   const weatherData = await fetchWeatherDataByLocationIdLastEntry(location_id);
+  return weatherData;
+};
+
+const getLastEntryWeatherData = async () => {
+  const weatherData = await fetchWeatherDataLastEntry();
   return weatherData;
 };
 
@@ -40,9 +48,11 @@ export default async function Home() {
 
   const averageWeatherData = await getAverageWeatherData();
 
+  const lastEntryWeatherData = await getLastEntryWeatherData();
+
   const weatherDataArray = await Promise.all(
     locations.map(async (location: WeatherLocation) => {
-      const weatherData = await getLastEntryWeatherData(location.id);
+      const weatherData = await getLastEntryWeatherDataByLocation(location.id);
       return weatherData;
     })
   );
@@ -71,16 +81,47 @@ export default async function Home() {
       <BootstrapClient />
 
       <div className="container-fluid d-flex flex-column">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-stretch gap-3 w-100">
+          <div
+            className="flex-fill"
+            style={{ maxWidth: "100%", minWidth: "200px", height: "100%" }}
+          >
+            {lastEntryWeatherData && (
+              <TemperatureCard
+                temperature={lastEntryWeatherData.temperature}
+                timestamp={lastEntryWeatherData.timestamp}
+              />
+            )}
+          </div>
+          <div
+            className="flex-fill"
+            style={{ maxWidth: "100%", minWidth: "200px", height: "100%" }}
+          >
+            {lastEntryWeatherData && (
+              <HumidityCard
+                humidity={lastEntryWeatherData.humidity}
+                timestamp={lastEntryWeatherData.timestamp}
+              />
+            )}
+          </div>
+
+          {averageWeatherData.length > 0 && (
+            <div
+              className="flex-fill"
+              style={{ maxWidth: "100%", minWidth: "200px", height: "100%" }}
+            >
+              <AverageWeatherCard
+                timestamp={averageWeatherData[0].timestamp}
+                temperature={averageWeatherData[0].temperature}
+                humidity={averageWeatherData[0].humidity}
+                windSpeed={averageWeatherData[0].wind_speed}
+                rainAmount={averageWeatherData[0].rain_amount}
+              />
+            </div>
+          )}
+        </div>
+
         <Carousel cards={cards.filter((card) => card !== null)} />
-        {averageWeatherData.length > 0 && (
-          <AverageWeatherCard
-            timestamp={averageWeatherData[0].timestamp}
-            temperature={averageWeatherData[0].temperature}
-            humidity={averageWeatherData[0].humidity}
-            windSpeed={averageWeatherData[0].wind_speed}
-            rainAmount={averageWeatherData[0].rain_amount}
-          />
-        )}
       </div>
     </>
   );

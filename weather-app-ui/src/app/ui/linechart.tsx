@@ -41,7 +41,7 @@ const CustomLineChart = () => {
     <>
       <div className="card shadow-sm mb-5 mt-5 bg-body rounded">
         <div className="card-header text-baseline ">
-          <h5 className="card-title">Weather Data Records</h5>
+          <h5 className="card-title">Wettereinträge</h5>
         </div>
         <div className="d-flex justify-content-baseline mt-3 mb-3">
           <button
@@ -52,7 +52,7 @@ const CustomLineChart = () => {
             }`}
             onClick={() => fetchData("last7days")}
           >
-            Last 7 Days
+            letzte 7 Tage
           </button>
           <button
             className={`btn mx-2 ${
@@ -62,7 +62,7 @@ const CustomLineChart = () => {
             }`}
             onClick={() => fetchData("lastday")}
           >
-            Current Day
+            Heute
           </button>
           <button
             className={`btn mx-2 ${
@@ -70,7 +70,7 @@ const CustomLineChart = () => {
             }`}
             onClick={() => fetchData("")}
           >
-            All Time
+            Alle Einträge
           </button>
         </div>
         <ResponsiveContainer width="100%" height={300}>
