@@ -4,3 +4,8 @@ export interface WeatherLocation {
     latitude: number;
     longitude: number;
 }
+
+export interface WeatherLocationEntriesCount {
+    location: string;
+    count: number;
+}
