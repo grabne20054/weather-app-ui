@@ -39,8 +39,11 @@ const CustomLineChart = () => {
 
   return (
     <>
-      <div className="card shadow-sm p-3 mb-5 mt-5 bg-body rounded">
-        <div className="d-flex justify-content-baseline mb-3">
+      <div className="card shadow-sm mb-5 mt-5 bg-body rounded">
+        <div className="card-header text-baseline ">
+          <h5 className="card-title">Weather Data Records</h5>
+        </div>
+        <div className="d-flex justify-content-baseline mt-3 mb-3">
           <button
             className={`btn mx-2 ${
               selectedPeriod === "last7days"
