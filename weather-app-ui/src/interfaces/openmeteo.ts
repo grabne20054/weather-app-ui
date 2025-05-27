@@ -11,3 +11,15 @@ export interface OpenMeteoTemperatureData {
     unit: string
 
 }
+
+export interface OpenMeteoTemperatureDifference {
+    location: {
+        latitude: number;
+        longitude: number;
+        name: string;
+    },
+    years: number[],
+    date: string,
+    diff: number,
+    unit: string
+}

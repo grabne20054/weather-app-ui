@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { OpenMeteoTemperatureData } from "@/interfaces/openmeteo";
+import { OpenMeteoTemperatureData, OpenMeteoTemperatureDifference } from "@/interfaces/openmeteo";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -31,4 +31,28 @@ const fetchOpenMeteoTemperatureData = async (
     }
 };
 
-export { fetchOpenMeteoTemperatureData };
+const fetchTemperatureDifferenceToday = async (
+    latitude = 47.2446,
+    longitude = 15.8003,
+    name = "Stubenberg"
+): Promise<OpenMeteoTemperatureDifference> => {
+    try {
+        const response: AxiosResponse<OpenMeteoTemperatureDifference> = await axios.get(
+            `${API_BASE_URL}/open-meteo/temperature/today-average`,
+            {
+                params: {
+                    latitude,
+                    longitude,
+                    name,
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching Open Meteo temperature difference data:", error);
+        throw error;
+    }
+}
+
+export { fetchOpenMeteoTemperatureData, fetchTemperatureDifferenceToday };

@@ -4,6 +4,7 @@ import { Video } from "./ui/video";
 import { WeatherCard } from "./components/WeatherCard";
 import { Carousel } from "./ui/carousel";
 import TemperatureCard from "./components/TemperatureCard";
+import TempDiffCard from "./components/TempDiffCard";
 import HumidityCard from "./components/HumidityCard";
 import {
   fetchWeatherData,
@@ -11,6 +12,8 @@ import {
   fetchAverageWeatherDataCurrentDay,
   fetchWeatherDataLastEntry,
 } from "@/api/weatherDataApi";
+
+import { fetchTemperatureDifferenceToday } from "@/api/openMeteo";
 import { fetchLocations, fetchLocationById } from "@/api/locationApi";
 import { WeatherLocation } from "@/interfaces/location";
 import AverageWeatherCard from "./components/AverageWeatherCard";
@@ -40,6 +43,11 @@ const getAverageWeatherData = async () => {
   return averageWeatherData;
 };
 
+const getTemperatureDifferenceToday = async () => {
+  const temperatureDifference = await fetchTemperatureDifferenceToday();
+  return temperatureDifference;
+};
+
 export default async function Home() {
   const liveStreamUrl = process.env.NEXT_PUBLIC_LIVE_STREAM_URL;
   const liveStreamToken = process.env.NEXT_PUBLIC_LIVE_STREAM_TOKEN;
@@ -49,6 +57,8 @@ export default async function Home() {
   const averageWeatherData = await getAverageWeatherData();
 
   const lastEntryWeatherData = await getLastEntryWeatherData();
+
+  const temperatureDifferenceToday = await getTemperatureDifferenceToday();
 
   const weatherDataArray = await Promise.all(
     locations.map(async (location: WeatherLocation) => {
@@ -119,6 +129,17 @@ export default async function Home() {
               />
             </div>
           )}
+          <div
+            className="flex-fill"
+            style={{ maxWidth: "100%", minWidth: "200px", height: "100%" }}
+          >
+            {temperatureDifferenceToday && (
+              <TempDiffCard
+                temperature={temperatureDifferenceToday.diff}
+                timestamp={temperatureDifferenceToday.date}
+              />
+            )}
+          </div>
         </div>
 
         <Carousel cards={cards.filter((card) => card !== null)} />
