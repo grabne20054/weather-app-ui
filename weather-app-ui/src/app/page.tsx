@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapClient from "./components/BootstrapClient";
 import { Video } from "./ui/video";
