@@ -1,4 +1,5 @@
-export const dynamic = "force-dynamic";
+"use server";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapClient from "./components/BootstrapClient";
 import { Video } from "./ui/video";
@@ -19,51 +20,23 @@ import { fetchLocations, fetchLocationById } from "@/api/locationApi";
 import { WeatherLocation } from "@/interfaces/location";
 import AverageWeatherCard from "./components/AverageWeatherCard";
 
-const getLocations = async () => {
-  const locations = await fetchLocations();
-  return locations;
-};
-
-const getLocationById = async (id: number) => {
-  const location = await fetchLocationById(id);
-  return location.name;
-};
-
-const getLastEntryWeatherDataByLocation = async (location_id: number) => {
-  const weatherData = await fetchWeatherDataByLocationIdLastEntry(location_id);
-  return weatherData;
-};
-
-const getLastEntryWeatherData = async () => {
-  const weatherData = await fetchWeatherDataLastEntry();
-  return weatherData;
-};
-
-const getAverageWeatherData = async () => {
-  const averageWeatherData = await fetchAverageWeatherDataCurrentDay();
-  return averageWeatherData;
-};
-
-const getTemperatureDifferenceToday = async () => {
-  const temperatureDifference = await fetchTemperatureDifferenceToday();
-  return temperatureDifference;
-};
-
 export default async function Home() {
   const liveStreamUrl = process.env.NEXT_PUBLIC_LIVE_STREAM_URL;
   const liveStreamToken = process.env.NEXT_PUBLIC_LIVE_STREAM_TOKEN;
 
-  const locations = await getLocations();
+  const locations = await fetchLocations();
 
-  const averageWeatherData = await getAverageWeatherData();
+  const averageWeatherData = await fetchAverageWeatherDataCurrentDay();
 
-  const lastEntryWeatherData = await getLastEntryWeatherData();
+  const lastEntryWeatherData = await fetchWeatherDataLastEntry();
 
-  const temperatureDifferenceToday = await getTemperatureDifferenceToday();
+  const temperatureDifferenceToday = await fetchTemperatureDifferenceToday();
 
   const weatherDataArray = await Promise.all(
     locations.map(async (location: WeatherLocation) => {
-      const weatherData = await getLastEntryWeatherDataByLocation(location.id);
+      const weatherData = await fetchWeatherDataByLocationIdLastEntry(
+        location.id
+      );
       return weatherData;
     })
   );
@@ -76,7 +49,7 @@ export default async function Home() {
       return (
         <WeatherCard
           key={index}
-          location={await getLocationById(data.location_id)}
+          location={(await fetchLocationById(data.location_id)).name}
           timestamp={data.timestamp}
           temperature={data.temperature}
           humidity={data.humidity}
