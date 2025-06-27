@@ -15,7 +15,7 @@ import { fetchWeatherDataLastDay } from "@/api/weatherDataApi";
 
 const CustomLineChart = () => {
   const [data, setData] = useState<any>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("lastday");
 
   const fetchData = async (period: string) => {
     let response;
@@ -34,7 +34,7 @@ const CustomLineChart = () => {
   };
 
   useEffect(() => {
-    fetchData("");
+    fetchData("lastday");
   }, []);
 
   return (

@@ -1,8 +1,8 @@
-"use server";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapClient from "./components/BootstrapClient";
-import { Video } from "./ui/video";
 import { WeatherCard } from "./components/WeatherCard";
 import { Carousel } from "./ui/carousel";
 import TemperatureCard from "./components/TemperatureCard";

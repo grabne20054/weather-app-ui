@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import { OpenMeteoTemperatureData, OpenMeteoTemperatureDifference } from "@/interfaces/openmeteo";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -11,20 +10,23 @@ const fetchOpenMeteoTemperatureData = async (
     end_year = 2024
 ): Promise<OpenMeteoTemperatureData> => {
     try {
-        const response: AxiosResponse<OpenMeteoTemperatureData> = await axios.get(
-            `${API_BASE_URL}/open-meteo/temperature/daily-averages`,
-            {
-                params: {
-                    latitude,
-                    longitude,
-                    name,
-                    start_year,
-                    end_year,
-                },
-            }
-        );
+        const url = new URL(`${API_BASE_URL}/open-meteo/temperature/daily-averages`);
+        url.searchParams.set("latitude", latitude.toString());
+        url.searchParams.set("longitude", longitude.toString());
+        url.searchParams.set("name", name);
+        url.searchParams.set("start_year", start_year.toString());
+        url.searchParams.set("end_year", end_year.toString());
 
-        return response.data;
+        const response = await fetch(url.toString(), {
+            next: { revalidate: 3600 },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch temperature data: ${response.status}`);
+        }
+
+        const data: OpenMeteoTemperatureData = await response.json();
+        return data;
     } catch (error) {
         console.error("Error fetching Open Meteo temperature data:", error);
         throw error;
@@ -37,22 +39,25 @@ const fetchTemperatureDifferenceToday = async (
     name = "Stubenberg"
 ): Promise<OpenMeteoTemperatureDifference> => {
     try {
-        const response: AxiosResponse<OpenMeteoTemperatureDifference> = await axios.get(
-            `${API_BASE_URL}/open-meteo/temperature/today-average`,
-            {
-                params: {
-                    latitude,
-                    longitude,
-                    name,
-                },
-            }
-        );
+        const url = new URL(`${API_BASE_URL}/open-meteo/temperature/today-average`);
+        url.searchParams.set("latitude", latitude.toString());
+        url.searchParams.set("longitude", longitude.toString());
+        url.searchParams.set("name", name);
 
-        return response.data;
+        const response = await fetch(url.toString(), {
+            next: { revalidate: 3600 },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch temperature difference: ${response.status}`);
+        }
+
+        const data: OpenMeteoTemperatureDifference = await response.json();
+        return data;
     } catch (error) {
         console.error("Error fetching Open Meteo temperature difference data:", error);
         throw error;
     }
-}
+};
 
 export { fetchOpenMeteoTemperatureData, fetchTemperatureDifferenceToday };
