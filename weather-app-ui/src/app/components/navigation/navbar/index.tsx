@@ -6,6 +6,7 @@ const navigation = [
   { name: "Wetter", href: "/", current: true },
   { name: "Statistiken", href: "/statistics", current: false },
   { name: "Cams", href: "/cams", current: false },
+  { name: "Solaranlage", href: "/solar", current: false },
 ];
 
 interface NavBarProps {
